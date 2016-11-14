@@ -12,7 +12,7 @@ public class Mochila {
 	
 	private int[] valores;
 	private int[] pesos;
-	private int[][] cargardorMochila;
+	private int[][] matrizMochila;
 	
 	
 	public Mochila(String rutaArchivo){
@@ -30,18 +30,23 @@ public class Mochila {
 	public void cargarDatos() {		
 		try {
 			lectorArchivo.readLine();//salteo titulo del archivo
+			
 			cantItems = Integer.parseInt(lectorArchivo.readLine().split(" ")[1]);
+			
 			capacidadMochila = Integer.parseInt(lectorArchivo.readLine().split(" ")[1]);
-			lectorArchivo.readLine(); //salteo optimo
+			
+			System.out.println("Optimo Pisinger: "+lectorArchivo.readLine()); //salteo optimo
+			
 			lectorArchivo.readLine(); //salteo tiempo
 		
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		
 		valores = new int[cantItems+1];
 		pesos = new int[cantItems+1];
-		cargardorMochila = new int[cantItems+1][capacidadMochila+1];
+		matrizMochila = new int [cantItems+1][capacidadMochila+1];
 		
 		//leo todos los valores
 		for (int i = 1; i <= cantItems ; i++) {
@@ -55,27 +60,29 @@ public class Mochila {
 			
 			valores[i] = Integer.parseInt(linea[1]);
 			pesos[i] = Integer.parseInt(linea[2]);
+						
 		}		// TODO Auto-generated method stub
 	}
 
 	public void cargarMochila() {
-		for(int i=0;i<=cantItems;i++){
-			for(int j=0;j<=capacidadMochila;j++){
+		for(int i=0; i<= cantItems; i++){
+			for(int j=0; j <= capacidadMochila; j++){
+				//se pone en cero para tenga con q comparar en la segunda iteracion
 				if(i==0 || j==0){
-					cargardorMochila[i][j] = 0;
+					matrizMochila[i][j] = 0;
 				}
 				else if(j < pesos[i]){
-					cargardorMochila[i][j] = cargardorMochila[i-1][j];
+					matrizMochila[i][j] = matrizMochila[i-1][j];
 				}
 				else{			
-					cargardorMochila[i][j] = Math.max(cargardorMochila[i-1][j],cargardorMochila[i-1][j-pesos[i]]+valores[i]);
+					matrizMochila[i][j] = Math.max(matrizMochila[i-1][j],matrizMochila[i-1][j-pesos[i]]+valores[i]);
 				}
 			}
 		}
 	}
 	
 	public void mostrarDatos(){
-		System.out.println("Optimo: "+ cargardorMochila[cantItems][capacidadMochila]);
+		System.out.println("\nOptimo nuestro: "+ matrizMochila[cantItems][capacidadMochila]);
 		
 		int i = cantItems;
 		int j = capacidadMochila;
@@ -83,12 +90,14 @@ public class Mochila {
 		int pesoAcumulado = 0;
 		int valorAcumulado = 0;
 		
+		System.out.println("\nItems cargados\n");
+		
 		//antes de q recorra todas las filas o el peso se hace cero
 		while(i > 0 && j > 0){
 			//arranco desde la ultima fila y columna y voy retrocediendo
 			// si la fila anterior cambia quiere decir que hubo un incrmento
 			// y que el elemento i fue ingresado en la mochila
-			if(cargardorMochila[i][j] != cargardorMochila[i-1][j]){
+			if(matrizMochila[i][j] != matrizMochila[i-1][j]){
 				itemsCargados++;
 				
 				valorAcumulado += valores[i];
@@ -96,10 +105,12 @@ public class Mochila {
 				pesoAcumulado += pesos[i];
 				
 				j = j - pesos[i];
+				
+				System.out.println("Item : "+ i + " valor: " + valores[i] + "  peso: "+pesos[i]);
 			}
 			i--;
 		}
 		
-		System.out.println("Items : "+ itemsCargados + " valorTotal: " + valorAcumulado + "  pesoTotal: "+pesoAcumulado);        
+		System.out.println("\nItems en Total: "+ itemsCargados + " valorTotal: " + valorAcumulado + "  pesoTotal: "+pesoAcumulado);        
 	}
 }
