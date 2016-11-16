@@ -9,8 +9,4 @@ public class Main {
 		
 		m.mostrarDatos();
 	}
-
-	//public  int solveKnapsackDP(int[] value, int[] weight, int n, int capMochila) {
-	//}
-
 }
