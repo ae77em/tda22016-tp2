@@ -1,19 +1,11 @@
 package dinamica.Viajante;
 
 import java.util.Deque;
-import java.util.LinkedList;
-import java.util.PriorityQueue;
-import org.junit.After;
-import org.junit.AfterClass;
-import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class ViajanteTest {
     int[][] matriz;
-    LinkedList<Integer> vertices;
-    final int DIMENSION_MATRIZ = 15;
     
     public ViajanteTest() {
         matriz = new int[][]{
@@ -33,10 +25,6 @@ public class ViajanteTest {
             {72, 52, 31, 43, 65, 29, 46, 31, 51, 23, 59, 11, 62, 0, 59},
             {46, 21, 51, 64, 23, 59, 33, 37, 11, 37, 61, 55, 23, 59, 0}
         };
-        vertices = new LinkedList<>();
-        for (int i = 0; i < DIMENSION_MATRIZ; i++) {
-            vertices.add(i);
-        }
     }
         
     @Test
@@ -47,15 +35,8 @@ public class ViajanteTest {
         assertEquals(resultadoEsperado, resultado, 0.0);
         Integer[] caminoEsperado = {0, 12, 1, 14, 8, 4, 6, 2, 11, 13, 9, 7, 5, 3, 10, 0};
         Deque<Integer> camino = instancia.obtenerCamino();
-        for (int i = 0; i < DIMENSION_MATRIZ; i++) {
+        for (int i = 0; i < matriz.length; i++) {
             assertEquals(caminoEsperado[i], camino.poll());
         }
     }
-    /*
-    @Test
-    public void testCrearSets() {
-        Viajante instance = new Viajante(matriz);
-        instance.imprimirSets();
-    }
-    */
 }

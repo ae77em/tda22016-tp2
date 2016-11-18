@@ -1,13 +1,9 @@
 package dinamica.Viajante;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -138,61 +134,6 @@ public class Viajante {
         return costo;
     }
 
-    private List<Set<Integer>> crearSetsHijos() {
-        int entrada[] = new int[matrizAdyacencia.length -1];
-        for(int i = 0; i < entrada.length; i++) {
-            entrada[i] = i+1;
-        }
-        List<Set<Integer>> setsHijos = new ArrayList<>();
-        int resultado[] = new int[entrada.length];
-        crearSetHijo(entrada, 0, 0, setsHijos, resultado);
-        Collections.sort(setsHijos, new ComparadorTamanio());
-        for (Set<Integer> set : setsHijos) {
-            System.out.println(set);
-        }
-        return setsHijos;
-    }
-
-    private void crearSetHijo(int entrada[], int inicio, int pos, List<Set<Integer>> setsHijos, int resultado[]) {
-        if(pos == entrada.length) {
-            return;
-        }
-        Set<Integer> set = crearSet(resultado, pos);
-        setsHijos.add(set);
-        for(int i = inicio; i < entrada.length; i++) {
-            resultado[pos] = entrada[i];
-            crearSetHijo(entrada, i+1, pos+1, setsHijos, resultado);
-        }
-    }
-
-    private static Set<Integer> crearSet(int input[], int pos) {
-        if(pos == 0) {
-            return new HashSet<>();
-        }
-        Set<Integer> set = new HashSet<>();
-        for(int i = 0; i < pos; i++) {
-            set.add(input[i]);
-        }
-        return set;
-    }
-
-    private static class ComparadorTamanio implements Comparator<Set<Integer>>{
-        @Override
-        public int compare(Set<Integer> o1, Set<Integer> o2) {
-            return o1.size() - o2.size();
-        }
-    }
-
-    public void imprimirSets() {
-        SetFactory factory = new SetFactory(1, matrizAdyacencia.length-1);
-        
-        Set<Integer> set = factory.crearSet();
-        while (set != null) {
-            System.out.println(set);
-            set = factory.crearSet();
-        }
-    }
-    
     private class SetFactory {
         final int inicio;
         final int fin;
