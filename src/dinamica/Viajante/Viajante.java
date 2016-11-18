@@ -44,7 +44,6 @@ public class Viajante {
 
 
     private final int[][] matrizAdyacencia;
-    private final List<Integer> vertices;
     private Deque<Integer> caminoSolucion;
     Map<Nodo, Integer> costoMinimoNodo;
     Map<Nodo, Integer> padres;
@@ -53,8 +52,7 @@ public class Viajante {
 
 
 
-    public Viajante(List<Integer> vertices, int[][] matriz) {
-        this.vertices = vertices;
+    public Viajante(int[][] matriz) {
         matrizAdyacencia = matriz;
         costoMinimoNodo = new HashMap<>();
         padres = new HashMap<>();
@@ -73,10 +71,11 @@ public class Viajante {
         return min;
     }
     
-    public void buscarCaminoMinimo() {
-        List<Set<Integer>> setsHijos = crearSetsHijos();
-
-        for(Set<Integer> set : setsHijos) {
+    private void buscarCaminoMinimo() {
+        SetFactory factory = new SetFactory(1, matrizAdyacencia.length-1);
+        
+        Set<Integer> set = factory.crearSet();
+        while (set != null) {
             for(int verticeActual = 1; verticeActual < matrizAdyacencia.length; verticeActual++) {
                 if(set.contains(verticeActual)) {
                     continue;
@@ -88,6 +87,7 @@ public class Viajante {
                 }
                 costoMinimoNodo.put(nodoActual, costoMinimo);
             }
+            set = factory.crearSet();
         }
     }
     
@@ -113,7 +113,10 @@ public class Viajante {
     }
     
     private void guardarCamino() {
-        Set<Integer> set = new HashSet<>(vertices);
+        Set<Integer> set = new HashSet<>();
+        for (int i = 0; i < matrizAdyacencia.length; i++) {
+            set.add(i);
+        }
         
         Integer vertice = 0;
         caminoSolucion = new LinkedList<>();
@@ -144,6 +147,9 @@ public class Viajante {
         int resultado[] = new int[entrada.length];
         crearSetHijo(entrada, 0, 0, setsHijos, resultado);
         Collections.sort(setsHijos, new ComparadorTamanio());
+        for (Set<Integer> set : setsHijos) {
+            System.out.println(set);
+        }
         return setsHijos;
     }
 
@@ -177,5 +183,92 @@ public class Viajante {
         }
     }
 
+    public void imprimirSets() {
+        SetFactory factory = new SetFactory(1, matrizAdyacencia.length-1);
+        
+        Set<Integer> set = factory.crearSet();
+        while (set != null) {
+            System.out.println(set);
+            set = factory.crearSet();
+        }
+    }
+    
+    private class SetFactory {
+        final int inicio;
+        final int fin;
+        int len;
+        int ultimoBase;
+        Set<Integer> setBase;
+        private boolean terminar;
+        
+        public SetFactory(int inicio, int fin) {
+            setBase = new HashSet<>();
+            this.inicio = inicio;
+            this.fin = fin;
+            len = 0;
+            ultimoBase = 0;
+            terminar = false;
+        }
+        
+        public Set<Integer> crearSet() {
+            if (terminar) return null;
+            if (len == 0) {
+                len++;
+                return new HashSet<>();
+            }
+            
+            modificarBase();
+            return (setBase.size() >= fin) ? null : new HashSet<>(setBase);
+        }
+        
+        private void modificarBase() {
+            if (ultimoBase != 0) setBase.remove(ultimoBase);
+            if (ultimoBase != fin) {
+                setBase.add(++ultimoBase);
+                return;
+            }
+            if (ultimoBase == 0) {
+                setBase.add(inicio);
+                ultimoBase = inicio;
+                return;
+            }
+            
+            
+            boolean modificado = false;
+            int ultimoRemovido = ultimoBase, ultimoAgregado = 0,
+                    elemento = fin -1, cantRemovidos = 1;
+            
+            
+                    
+            while (! modificado && ! setBase.isEmpty() && elemento > 0) {
+                if (setBase.contains(elemento)) {
+                    if (ultimoRemovido != elemento+1) {
+                        modificado = true;
+                        setBase.remove(elemento);
+                        setBase.add(elemento + 1);
+                        ultimoAgregado = elemento + 1;
+                        if (ultimoBase < ultimoAgregado) ultimoBase = ultimoAgregado;
+                    } else {
+                        setBase.remove(elemento);
+                        ultimoRemovido = elemento;
+                        cantRemovidos++;
+                    }
+                    
+                }
+                elemento--;
+                
+            }
+            if (ultimoBase == fin && setBase.isEmpty()) cantRemovidos++;
+            
+            for (int i = 1; i <= cantRemovidos; i++) {
+                setBase.add(ultimoAgregado + i);
+                ultimoBase = ultimoAgregado + i;
+            }
+            if (setBase.size() >= fin) {
+                
+                terminar = true;
+            }
+        }
+    }
 
 }

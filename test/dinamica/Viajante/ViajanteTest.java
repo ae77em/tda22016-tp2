@@ -41,7 +41,7 @@ public class ViajanteTest {
         
     @Test
     public void testCalcular() {
-        Viajante instancia = new Viajante(vertices, matriz);
+        Viajante instancia = new Viajante(matriz);
         double resultadoEsperado = 291;
         double resultado = instancia.calcular();
         assertEquals(resultadoEsperado, resultado, 0.0);
@@ -51,5 +51,11 @@ public class ViajanteTest {
             assertEquals(caminoEsperado[i], camino.poll());
         }
     }
-    
+    /*
+    @Test
+    public void testCrearSets() {
+        Viajante instance = new Viajante(matriz);
+        instance.imprimirSets();
+    }
+    */
 }
