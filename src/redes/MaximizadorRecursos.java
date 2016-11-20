@@ -4,7 +4,7 @@ import java.util.Vector;
 
 public class MaximizadorRecursos {
 	FlujoRed redDeFlujos;
-	HalladorFlujoMaximo maxflow;
+	HalladorFlujoMaximo halladorFlujoMaximo;
 	
 	Vector<Proyecto> proyectos;
 	Vector<Experto> expertos;
@@ -36,25 +36,31 @@ public class MaximizadorRecursos {
 	
 	public MaximizadorRecursos(String pathArchivo){
 		redDeFlujos = new FlujoRed(pathArchivo);
-		
+
+		halladorFlujoMaximo = new HalladorFlujoMaximo(redDeFlujos);
+
 		proyectos = new Vector<Proyecto>();
 
 		expertos = new Vector<Experto>();
 	}
 
 	public void buscarProyectoQueMaximicenLosBeneficios() {
-		maxflow = new HalladorFlujoMaximo(redDeFlujos);
+		halladorFlujoMaximo.hallarFlujoMaximo();
    }
 	
 	public void seleccionarProyectos(){
-		Vector<Integer> corte = maxflow.obtenerNodosDelCorte();
+		Vector<Integer> corte = halladorFlujoMaximo.obtenerNodosDelCorte();
 		
-		corte.remove(0); //quito la fuente
+		System.out.println("corte/n"+corte);
+		System.out.println("corte/n"+corte.size());
+		
+		corte.remove(0); //quito la fuente para que no figure como un proyecto a buscar
 	
 		int cantidadProyectos = obtenerCantidadDeProyectos();
 				
-        for (int v = 0; v < cantidadProyectos; v++){
-        	if(corte.elementAt(v) <= cantidadProyectos){
+        for (int v = 0; v < corte.size(); v++){
+        	//me quedo con los elementos del corte que solo representa proyectos
+        	if(corte.elementAt(v) <= cantidadProyectos && corte.elementAt(v) != null){
         		proyectos.add(new Proyecto(corte.elementAt(v)));
         	}
         }
@@ -70,7 +76,6 @@ public class MaximizadorRecursos {
 			int unProyecto = proyectos.elementAt(v).proyecto;
 			
 			proyectos.elementAt(v).beneficio = obtenerBeneficioDelProyecto(unProyecto);
-			//System.out.println(proyectos.elementAt(v).proyecto +" "+proyectos.elementAt(v).beneficio);
 			
 			proyectos.elementAt(v).expertos = obtenerExpertosNecDelProyecto(unProyecto);
 		}
@@ -80,8 +85,8 @@ public class MaximizadorRecursos {
 		Vector<Experto> expertos = new Vector<Experto>();
 		
 		for(Arista unaArista : redDeFlujos.obtenerAdyacenciasDelNodo(unProyecto)){
-			if(unaArista.obtenerDesde() == unProyecto){
-				int nodoExperto = unaArista.obtenerA();
+			if(unaArista.obtenerDesde() == unProyecto && unaArista.obtenerHacia() != 0){
+				int nodoExperto = unaArista.obtenerHacia();
 				Experto unExperto = new Experto(nodoExperto);
 				
 				unExperto.costo = obtenerCostoDelExperto(nodoExperto);
@@ -104,7 +109,7 @@ public class MaximizadorRecursos {
 	private float obtenerBeneficioDelProyecto(int unProyecto){
 		//el proyecto es el nodo A de la arista conectada con la fuente
 		for(Arista unaArista : redDeFlujos.obtenerAdyacenciasDelNodo(0)){
-			if(unaArista.obtenerA() == unProyecto){
+			if(unaArista.obtenerHacia() == unProyecto){
 				return unaArista.obtenerCapacidad(); 
 			}
 		}
@@ -133,3 +138,4 @@ public class MaximizadorRecursos {
 		System.out.println("BeneficioTotal: "+beneficioTotal+" CostoTotal: "+costoTotal+" Rentabilidad: "+ (beneficioTotal-costoTotal));
 	}
 }
+

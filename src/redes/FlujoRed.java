@@ -50,11 +50,11 @@ public class FlujoRed {
         	
         	float capacidad = Integer.parseInt(unProyecto[0]);
         	
-            agregarArista(new Arista(0, i, capacidad)); //agrego un proyecto
+            agregarArista(new AristaDirecta(0, i, capacidad)); //agrego un proyecto
             
             //ya q n l primer valor esta el peso del beneficio del proyecto i
             for(int j = 1; j<= unProyecto.length-1; j++ ) 
-            	agregarArista(new Arista(i, Integer.parseInt(unProyecto[j]) + cantProyectos, 
+            	agregarArista(new AristaDirecta(i, Integer.parseInt(unProyecto[j]) + cantProyectos, 
             														Float.POSITIVE_INFINITY));
 		}
 	}
@@ -79,7 +79,7 @@ public class FlujoRed {
 
 	private void conectarAristasAlSumidero(ArrayList<Integer> costos,int cantProyectos){
 		for (int j = 1; j <= costos.size(); j++) {
-			agregarArista(new Arista(cantProyectos + j, cantidadNodos-1, costos.get(j-1)));		
+			agregarArista(new AristaDirecta(cantProyectos + j, cantidadNodos-1, costos.get(j-1)));		
 		}
     }
 
@@ -172,7 +172,7 @@ public class FlujoRed {
     	
         int v = e.obtenerDesde();
         
-        int w = e.obtenerA();
+        int w = e.obtenerHacia();
         
         adyacencias.elementAt(v).add(e);
         
@@ -190,7 +190,7 @@ public class FlujoRed {
         
         for (int v = 0; v < cantidadNodos; v++)
             for (Arista e : obtenerAdyacenciasDelNodo(v)) {
-                if (e.obtenerA() != v)
+                if (e.obtenerHacia() != v)
                 	aristas.add(e);
             }
         return aristas;
@@ -207,10 +207,18 @@ public class FlujoRed {
             s.append(v + ":  ");
             
             for (Arista e : adyacencias.elementAt(v)) {
-                if (e.obtenerA() != v) s.append(e + "  ");
+                if (e.obtenerHacia() != v) s.append(e + "  ");
             }
             s.append("\n");
         }
         return s.toString();
     }
+    
+    public int obtenerSumidero(){
+    	return cantidadNodos-1;
+    }
+
+	public void agregarAdyacencia(int nodo, Arista b) {
+		adyacencias.elementAt(nodo).add(b);
+	}
 }

@@ -3,7 +3,7 @@ package flujoDeRedes;
 public class Main{
 
     public static void main(String[] args){
-    	MaximizadorRecursos m = new MaximizadorRecursos("file2.txt");
+    	MaximizadorRecursos m = new MaximizadorRecursos(args[0]);
 
     	m.buscarProyectoQueMaximicenLosBeneficios();
     	
