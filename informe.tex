@@ -44,7 +44,7 @@ Martin, Débora, \textit{Padrón Nro. 90934} \\
 
 
 \subsection{El problema del viajante de comercio}
-Al implementar el algoritmo de Bellman-Held-Karp se notó que insume una gran cantidad de espacio en memoria, por lo que se procuró realizar algunas optimizaciones que permitieran su ejecución para matrices de orden superior. Principalmente, se procuró evitar mantener en memoria una gran cantidad de sets de vertices simultaneamente.
+Al implementar el algoritmo de Bellman-Held-Karp se notó que insume una gran cantidad de espacio en memoria, por lo que no fue posible realizar corridas para matrices de orden superior. El espacio en memoria que insume este algoritmo es del orden de $O(2^n n)$.
 
 La complejidad del algoritmo se calcula en $O(2^n n^2)$ debido a las comparaciones realizadas y la adición de elementos a los distintos sets. A continuación se muestran los tiempos de ejecución dependiendo de la cantidad de vertices.
 
@@ -52,15 +52,14 @@ La complejidad del algoritmo se calcula en $O(2^n n^2)$ debido a las comparacion
 \centering
 \begin{tabular}{|c|c|c|c|c|c|c|}
 \hline
-Cantidad de vertices	& Tiempo de ejecución (s)\\\hline
-15						& 17,130\\\hline
-17						& \\\hline
-19						& \\\hline
-21						& \\\hline
-23						& \\\hline
+Cantidad de ciudades	& Tiempo de ejecución (segundos)\\\hline
+15						& 16\\\hline
+17						& 299\\\hline
+19						& 7237\\\hline
+21						& 22157\\\hline
 \end{tabular}
-\caption{Resultados por grafo no ponderado}
-\label{tab:datosexp}
+\caption{Tiempo en función de la cantidad de ciudades para el algoritmo de Bellman-Held-Karp}
+\label{tab:held}
 \end{table}
 
 
