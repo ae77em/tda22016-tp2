@@ -1,0 +1,73 @@
+\documentclass[a4paper,10pt]{article}
+
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc} % Permite escribir directamente áéíóúñ
+\usepackage{float}
+\usepackage[hidelinks]{hyperref}
+\usepackage{pdfpages}
+\usepackage{multirow}
+\usepackage[margin=0.9in]{geometry}
+
+\title{ \textbf{ 7529. Teoría de Algoritmos I\\
+Trabajo Práctico 2}}
+
+\author{ Apellido, Nombre, \textit{Padrón Nro. ...} \\
+\texttt{ mail } \\[2.5ex]
+Apellido, Nombre, \textit{Padrón Nro. ...} \\
+\texttt{ mail } \\[2.5ex]
+Martin, Débora, \textit{Padrón Nro. 90934} \\
+\texttt{ demartin@fi.uba.ar } \\[2.5ex]
+\normalsize{2do. Cuatrimestre de 2016} \\
+}
+
+\date{}
+
+\begin{document}
+\maketitle
+\thispagestyle{empty} % quita el nmero en la primer pagina
+\setcounter{page}{0}
+\newpage
+\tableofcontents
+
+\newpage
+
+\section{Programación dinamica}
+
+
+\subsection{El problema de la mochila}
+
+
+
+
+
+
+\subsection{El problema del viajante de comercio}
+Al implementar el algoritmo de Bellman-Held-Karp se notó que insume una gran cantidad de espacio en memoria, por lo que se procuró realizar algunas optimizaciones que permitieran su ejecución para matrices de orden superior. Principalmente, se procuró evitar mantener en memoria una gran cantidad de sets de vertices simultaneamente.
+
+La complejidad del algoritmo se calcula en $O(2^n n^2)$ debido a las comparaciones realizadas y la adición de elementos a los distintos sets. A continuación se muestran los tiempos de ejecución dependiendo de la cantidad de vertices.
+
+\begin{table}[H]
+\centering
+\begin{tabular}{|c|c|c|c|c|c|c|}
+\hline
+Cantidad de vertices	& Tiempo de ejecución (s)\\\hline
+15						& 17,130\\\hline
+17						& \\\hline
+19						& \\\hline
+21						& \\\hline
+23						& \\\hline
+\end{tabular}
+\caption{Resultados por grafo no ponderado}
+\label{tab:datosexp}
+\end{table}
+
+
+
+\section{Flujo de redes}
+
+
+
+
+\end{document}

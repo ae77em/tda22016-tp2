@@ -10,14 +10,12 @@ import java.util.Set;
 public class Viajante {
     private class Nodo {
         public int vertice;
-        public int hashCodeSetHijos;
-        public boolean hijosNoNulo;
+        public Set<Integer> hijos;		
 
         
         public Nodo(int vertice, Set<Integer> hijos) {
             this.vertice = vertice;
-            hijosNoNulo = (hijos == null);
-            if (hijosNoNulo) hashCodeSetHijos = hijos.hashCode();
+            this.hijos = hijos;
         }
         
         @Override
@@ -28,13 +26,13 @@ public class Viajante {
             Nodo index = (Nodo) o;
 
             if (vertice != index.vertice) return false;
-            return !(hijosNoNulo ? ! (hashCodeSetHijos == index.hashCodeSetHijos) : index.hijosNoNulo);
+            return !(hijos != null ? !hijos.equals(index.hijos) : index.hijos != null);
         }
 
         @Override
         public int hashCode() {
             int result = vertice;
-            result = 31 * result + (hijosNoNulo ? hashCodeSetHijos : 0);
+            result = 31 * result + (hijos != null ? hijos.hashCode() : 0);
             return result;
         }
 

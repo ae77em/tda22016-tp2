@@ -1,21 +1,23 @@
 package dinamica.Viajante;
 
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Deque;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    
+    private static int[][] crearMatriz(String archivoMatriz, int tamanio) throws IOException {
         int[][] matriz;
         BufferedReader lectorArchivo = null;
-        lectorArchivo = new BufferedReader(new FileReader(args[0]));
+        lectorArchivo = new BufferedReader(new FileReader(archivoMatriz));
         String linea = lectorArchivo.readLine();
 
         if (linea == null) throw new IOException("Archivo con formato erroneo");
         
         String[] valoresLinea = linea.split(" ");
-        int cantVertices = valoresLinea.length;
+        int cantVertices = tamanio;
         matriz = new int[cantVertices][cantVertices];
 
         for (int i = 0; i < cantVertices; i++) {
@@ -28,19 +30,20 @@ public class Main {
             if (linea == null && i < cantVertices -2) throw new IOException("Archivo con formato erroneo");
         }
         lectorArchivo.close();
-        lectorArchivo = new BufferedReader(new FileReader(args[1]));
-        valoresLinea = lectorArchivo.readLine().split(" ");        
+        return matriz;
+    }
+    
+    public static void main(String[] args) throws IOException {
+        int[] tamaniosMatriz = {15, 17, 19, 21, 23};
         
-        Viajante viajante = new Viajante(matriz);
-        int costo = viajante.calcular();
-        Deque<Integer> camino = viajante.obtenerCamino();
-        for (int i = 0; i < cantVertices; i++) {
-            if (Integer.parseInt(valoresLinea[i]) != camino.poll()) {
-                System.out.println("Camino incorrecto");
-                break;
-            }
+        for (int tamanio : tamaniosMatriz) {
+            int[][] matriz = crearMatriz(args[0], tamanio);
+            Viajante viajante = new Viajante(matriz);
+            int costo = viajante.calcular();
+            Deque<Integer> camino = viajante.obtenerCamino();
+            System.out.println("Tamanio: " + tamanio + ", Costo: " + costo + ", Camino:");
+            System.out.println(camino);
         }
-        lectorArchivo.close();
     }
     
 }
