@@ -22,3 +22,5 @@ tda22016-tp21.iml
 src/tda22016-tp2.iml
 
 .idea
+/nbproject/private/
+/build/
